@@ -24,6 +24,7 @@ const SourceEmail = styled.div`
     font-size: 16px;
     color: #666;
 `
+
 const DeleteButton = styled.button`
     background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
     color: white;
@@ -48,15 +49,15 @@ const DeleteButton = styled.button`
     }
 `
 
-const SourceItem = () => {
-  return (
-    <SourceBox>
-        <IndexPosition>1</IndexPosition>
-        <SourceName>Source Name</SourceName>
-        <SourceEmail>nmn2127@columbia.edu</SourceEmail>
-        <DeleteButton>Delete</DeleteButton>
-    </SourceBox>
-  );
+const SourceItem = ({ index, sourceName, sourceEmail, onDelete }) => {
+    return (
+      <SourceBox>
+          <IndexPosition>{index}</IndexPosition>
+          <SourceName>{sourceName}</SourceName>
+          <SourceEmail>{sourceEmail}</SourceEmail>
+          <DeleteButton onClick={onDelete}>Delete</DeleteButton>
+      </SourceBox>
+    );
 }
 
 export default SourceItem;

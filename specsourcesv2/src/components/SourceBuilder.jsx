@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { useState } from 'react';
 
 const BlueBox = styled.div`
   background: linear-gradient(135deg, #AFD7FA 0%, #9BC5F5 100%);
@@ -76,18 +77,44 @@ const AddButton = styled.button`
   }
 `
 
-const SourceBuilder = () => {
+const SourceBuilder = ({ onAddSource }) => {
+  const [sourceName, setSourceName] = useState('');
+  const [sourceEmail, setSourceEmail] = useState('');
+
+  const handleAddSource = () => {
+    if (sourceName.trim() && sourceEmail.trim()) {
+      onAddSource({
+        sourceName: sourceName,
+        sourceEmail: sourceEmail
+      });
+      
+      // Clear the form after adding
+      setSourceName('');
+      setSourceEmail('');
+    }
+  };
+
   return (
     <BlueBox>
       <FormContainer>
         <SourceText>Source Name</SourceText>
-        <FormBox type="text" placeholder="Enter Source Name" /> 
+        <FormBox 
+          type="text" 
+          placeholder="Enter Source Name" 
+          value={sourceName}
+          onChange={(e) => setSourceName(e.target.value)}
+        /> 
       </FormContainer>
       <FormContainer>
         <SourceText>Source Email</SourceText>
-        <FormBox type="text" placeholder="Enter Source Email" /> 
+        <FormBox 
+          type="email" 
+          placeholder="Enter Source Email" 
+          value={sourceEmail}
+          onChange={(e) => setSourceEmail(e.target.value)}
+        /> 
       </FormContainer>
-      <AddButton>Add Source</AddButton>
+      <AddButton onClick={handleAddSource}>Add Source</AddButton>
     </BlueBox>
   );
 }

@@ -12,14 +12,20 @@ const Container = styled.div`
   gap: 16px;
 `;
 
-const SourceList = () => {
+const SourceList = ({ items, onDelete }) => {
     return (
-    <Container>
-            <SourceItem></SourceItem>
-            <SourceItem></SourceItem>
-            <SourceItem></SourceItem>
-    </Container>
+        <Container>
+            {items.map((item, index) => (
+                <SourceItem 
+                    key={index}
+                    index={index + 1} 
+                    sourceName={item.sourceName} 
+                    sourceEmail={item.sourceEmail}
+                    onDelete={() => onDelete(index)}
+                />
+            ))}
+        </Container>
     );
-  }
-  
-  export default SourceList;
+}
+
+export default SourceList;
