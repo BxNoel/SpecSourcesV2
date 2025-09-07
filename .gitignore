@@ -1,0 +1,70 @@
+# ---------------------------
+# Node / React (frontend)
+# ---------------------------
+node_modules/
+dist/
+build/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+# Keep ONE lock file (commit it); remove these ignores if present:
+# package-lock.json
+# yarn.lock
+coverage/
+.eslintcache
+.cache/
+.parcel-cache/
+.turbo/
+*.tsbuildinfo
+
+# local environment variables
+.env
+.env.*
+!.env.example
+
+# editor settings
+.vscode/
+.idea/
+*.swp
+
+# ---------------------------
+# Python / FastAPI (backend)
+# ---------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.eggs/
+.env/
+.venv/
+venv/
+env/
+ENV/
+.ENV/
+.python-version
+
+# Type checking / lint / test
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.nox/
+.tox/
+.coverage
+coverage.xml
+htmlcov/
+
+# Databases
+*.db
+*.sqlite*
+# (If using Alembic: DO NOT ignore migrations/versions)
+
+# Logs
+*.log
+logs/
+
+# System
+.DS_Store
+Thumbs.db
