@@ -15,15 +15,16 @@ const Container = styled.div`
 const SourceList = ({ items, onDelete }) => {
     return (
         <Container>
-            {items.map((item, index) => (
-                <SourceItem 
-                    key={index}
-                    index={index + 1} 
-                    sourceName={item.sourceName} 
+            {items.map((item, idx) => (
+                <SourceItem
+                    key={item.id}
+                    id={item.id}
+                    displayIndex={idx + 1}
+                    sourceName={item.sourceName}
                     sourceEmail={item.sourceEmail}
-                    onDelete={() => onDelete(index)}
+                    onDelete={() => onDelete(item.id)}
                 />
-            ))}
+                ))}
         </Container>
     );
 }

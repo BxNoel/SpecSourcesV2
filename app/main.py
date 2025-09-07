@@ -39,23 +39,15 @@ def create_source(source: schemas.SpectatorSourceCreate, db: Session = Depends(g
     return db_source
     
 
+@app.delete("/delete/{source_id}", status_code=204)
+def delete_source(source_id: int, db: Session = Depends(get_db)):
+    deleted = crud.delete_source(db, source_id)
+    if not deleted:
+        raise HTTPException(status_code=404, detail="Source not found")
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#this is a health check fucntion
 @app.get("/health/db/users")
 def health_db_users(db: Session = Depends(get_db)):
     count = db.execute(text("SELECT COUNT(*) AS cnt FROM SpectatorSources")).scalar()

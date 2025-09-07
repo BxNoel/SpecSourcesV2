@@ -16,7 +16,6 @@ function App() {
   }, []);
   return (
     <>
-    <h1>{message}</h1>
     <HomePage/>
     </>
   );

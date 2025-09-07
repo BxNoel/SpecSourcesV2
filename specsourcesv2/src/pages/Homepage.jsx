@@ -30,46 +30,51 @@ const HeaderText = styled.p`
 `
 
 const HomePage = () => {
-
-    //MAKE API CALL TO DATABASE TO GET SOURCES
     const [sources, setSources] = useState([]);
-    //Make list to store itemes, use state to Update MAKE CALL TO DB
+  
     React.useEffect(() => {
-        axios.get('http://localhost:8000/all')
-        .then(response => {
-            console.log("Raw data:", response.data);
-            setSources(response.data.message);
-            //Mapping everything to the correct format
-            const mapped_sources = response.data.map(DB_MODEL => ({
-                id: DB_MODEL.id,
-                sourceName: DB_MODEL.name,
-                sourceEmail: DB_MODEL.email
-              }));
-              setSources(mapped_sources);
+      axios.get('http://localhost:8000/all')
+        .then(({ data }) => {
+          const mapped = data.map(s => ({
+            id: s.id,
+              sourceName: s.name,
+              sourceEmail: s.email
+          }));
+          setSources(mapped);
         })
-        .catch(error => {
-            console.error('There was an error connecting to the API!', error);
-        });
+        .catch(err => console.error('Fetch error:', err));
     }, []);
-
+  
     const handleAddSource = (newSource) => {
-        setSources([...sources, newSource]);
-        //Lets revamp this, we want to make a post request to the backend to add the source to the database
-        console.log( newSource );
+      // Send to backend first so we get the real id
+      const payload = { name: newSource.sourceName, email: newSource.sourceEmail };
+      axios.post('http://localhost:8000/create', payload)
+        .then(({ data }) => {
+          setSources(prev => [...prev, {
+            id: data.id,
+            sourceName: data.name,
+            sourceEmail: data.email
+          }]);
+        })
+        .catch(err => console.error('Add error:', err));
     };
-
-    const handleDelete = (indexToDelete) => {
-        setSources(sources.filter((_, index) => index !== indexToDelete));
+  
+    const handleDelete = (idToDelete) => {
+      setSources(prev => prev.filter(s => s.id !== idToDelete));
+      //Fetch ID to delete from the backend
+      axios.delete(`http://localhost:8000/delete/${idToDelete}`)
+        .catch(err => {
+          console.error('Delete error:', err);
+        });
     };
-
-
+  
     return (
-        <div>
-            <HeaderText> Spectaotr's Sources </HeaderText>
-            <SourceBuilder onAddSource={handleAddSource} />
-            <SourceList items={sources} onDelete={handleDelete} />
-        </div>
+      <div>
+        <HeaderText>Spectator's Sources</HeaderText>
+        <SourceBuilder onAddSource={handleAddSource} />
+        <SourceList items={sources} onDelete={handleDelete} />
+      </div>
     );
-}
-
-export default HomePage;
+  };
+  
+  export default HomePage;
