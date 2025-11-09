@@ -4,22 +4,6 @@ import styled from 'styled-components';
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const initial_items = [
-    {
-        sourceName: "Noel Negron",
-        sourceEmail: "nmn2127@columbia.edu"
-    },
-    {
-        sourceName: "Andre Perez",
-        sourceEmail: "avp2125@columbia.edu"
-    },
-    {
-        sourceName: "Caroline Roldan",
-        sourceEmail: "cr4302@barnard.edu"
-    }   
-];
-
-
 const HeaderText = styled.p`
   font-family: "Poppins", sans-serif;
   font-size: 50px;
@@ -30,30 +14,38 @@ const HeaderText = styled.p`
 `
 
 const HomePage = () => {
+
     const [sources, setSources] = useState([]);
-  
+    const [backendMessage, setBackendMessage] = useState('');
+ 
+    //DEMONSTRATE THIS
+    axios.get('http://localhost:8000/')
+      .then((response) => {
+        setBackendMessage(response.data.message);
+        console.log(response.data.message);
+      })
+      .catch(err => console.error('Fetch error:', err));
+
+    
     React.useEffect(() => {
-      axios.get('http://localhost:8000/all')
-        .then(({ data }) => {
-          const mapped = data.map(s => ({
-            id: s.id,
-              sourceName: s.name,
-              sourceEmail: s.email
-          }));
-          setSources(mapped);
-        })
-        .catch(err => console.error('Fetch error:', err));
-    }, []);
+        axios.get('http://localhost:8000/all')
+          .then((response) => {
+            setSources(response.data);
+          })
+          .catch(err => console.error('Fetch error:', err));
+      }, []);
   
     const handleAddSource = (newSource) => {
-      // Send to backend first so we get the real id
+      // Schemas is used here to ensure the data is in the correct format.
       const payload = { name: newSource.sourceName, email: newSource.sourceEmail };
+
       axios.post('http://localhost:8000/create', payload)
+        //This is a short cut to just get the data.
         .then(({ data }) => {
           setSources(prev => [...prev, {
             id: data.id,
-            sourceName: data.name,
-            sourceEmail: data.email
+            name: data.name,
+            email: data.email
           }]);
         })
         .catch(err => console.error('Add error:', err));
@@ -70,11 +62,12 @@ const HomePage = () => {
   
     return (
       <div>
+        <p>{backendMessage}</p>
         <HeaderText>Spectator's Sources</HeaderText>
         <SourceBuilder onAddSource={handleAddSource} />
         <SourceList items={sources} onDelete={handleDelete} />
       </div>
     );
   };
-  
+   
   export default HomePage;

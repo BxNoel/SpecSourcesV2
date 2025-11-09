@@ -46,13 +46,7 @@ def delete_source(source_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Source not found")
 
 
-
 #this is a health check fucntion
 @app.get("/health/db/users")
 def health_db_users(db: Session = Depends(get_db)):
-    count = db.execute(text("SELECT COUNT(*) AS cnt FROM SpectatorSources")).scalar()
-    rows = db.execute(
-        text("SELECT id, name, email FROM SpectatorSources ORDER BY id LIMIT 3")
-    ).fetchall()
-    sample = [dict(r._mapping) for r in rows]
-    return {"count": count, "sample": sample}
+    return {"count": db.query(models.SpectatorSource).count()}

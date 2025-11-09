@@ -20,8 +20,8 @@ const SourceList = ({ items, onDelete }) => {
                     key={item.id}
                     id={item.id}
                     displayIndex={idx + 1}
-                    sourceName={item.sourceName}
-                    sourceEmail={item.sourceEmail}
+                    sourceName={item.name}
+                    sourceEmail={item.email}
                     onDelete={() => onDelete(item.id)}
                 />
                 ))}
